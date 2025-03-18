@@ -81,13 +81,15 @@ async def process_latest_offers():
 
 
     if not first_time:
+        seen_hashes = set()  # ✅ Inicializujte proměnnou PŘED cyklem!
+
         for offer in new_offers:
             if offer.price >= 15000:
                 continue
 
-        # Detekce duplikátů (historických i v aktuální dávce)
+            # Detekce duplikátů
             is_duplicate = storage.contains(offer) or (offer.unique_hash in seen_hashes)
-            seen_hashes.add(offer.unique_hash)
+            seen_hashes.add(offer.unique_hash)  # 🛠️ Nyní již proměnná existuje
             
             current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         
