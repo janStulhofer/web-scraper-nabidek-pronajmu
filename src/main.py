@@ -82,6 +82,9 @@ async def process_latest_offers():
 
     if not first_time:
         for offer in new_offers:
+            if offer.price >= 15000:
+                continue
+                
             current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         
         # Extrahovat dispozici z titulku
