@@ -1,4 +1,7 @@
 #!/usr/bin/evn python3
+from dotenv import load_dotenv
+from disposition import Disposition
+load_dotenv(".env")
 import logging
 from datetime import datetime
 from time import time
