@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+import hashlib
 
 @dataclass
 class RentalOffer:
@@ -22,3 +22,9 @@ class RentalOffer:
 
     scraper: 'ScraperBase'
     """Odkaz na instanci srapera, ze kterého tato nabídka pochází"""
+    
+@property
+    def unique_hash(self) -> str:
+        """Unikátní identifikátor kombinující titul, cenu a lokaci"""
+        unique_str = f"{self.title}{self.price}{self.location}"
+        return hashlib.md5(unique_str.encode()).hexdigest()
