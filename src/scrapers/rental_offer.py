@@ -12,8 +12,7 @@ class RentalOffer:
     image_url: str
     scraper: 'ScraperBase'
 
-    @property  # Správně odsazeno (4 mezery/tab pod třídou)
+    @property
     def unique_hash(self) -> str:
-        """Unikátní identifikátor kombinující titul, cenu a lokaci"""
         unique_str = f"{self.title}{self.price}{self.location}"
         return hashlib.md5(unique_str.encode()).hexdigest()
