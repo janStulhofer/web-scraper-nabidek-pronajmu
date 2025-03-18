@@ -84,7 +84,11 @@ async def process_latest_offers():
         for offer in new_offers:
             if offer.price >= 15000:
                 continue
-                
+
+        # Detekce duplikátů (historických i v aktuální dávce)
+            is_duplicate = storage.contains(offer) or (offer.unique_hash in seen_hashes)
+            seen_hashes.add(offer.unique_hash)
+            
             current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         
         # Extrahovat dispozici z titulku
@@ -112,6 +116,16 @@ async def process_latest_offers():
             embed.add_field(name="Cena", value=f"**{offer.price} Kč** 💰", inline=True)
             embed.add_field(name="Čas přidání", value=f"**{current_time}** ⏱️", inline=False)
             embed.set_author(name=offer.scraper.name, icon_url=offer.scraper.logo_url)
+
+            # Zobrazit hash a emoji u duplikátů
+            short_hash = offer.unique_hash[:8]  # Prvních 8 znaků
+            footer_text = f"🆔 {short_hash}"
+            if is_duplicate:
+                footer_text += " ✅"
+            
+            embed.set_footer(text=footer_text)
+            embed.set_image(url=offer.image_url)
+            
             embed.set_image(url=offer.image_url)
             await channel.send(embed=embed)
     else:
