@@ -79,14 +79,19 @@ async def process_latest_offers():
 
     logging.info("Offers fetched (new: {})".format(len(new_offers)))
 
+    def parse_price(price_str):
+        try:
+        # Odstranit mezery a Kč, pak převést na int
+            return int(str(price_str).replace(" ", "").replace("Kč", ""))
+        except (ValueError, AttributeError):
+            return 0  # nebo jiná výchozí hodnota
 
     if not first_time:
         seen_hashes = set()  # ✅ Inicializujte proměnnou PŘED cyklem!
 
         for offer in new_offers:
-            if offer.price >= 15000:
+            if parse_price(offer.price) >= 16000:
                 continue
-
             # Detekce duplikátů
             is_duplicate = storage.contains(offer) or (offer.unique_hash in seen_hashes)
             seen_hashes.add(offer.unique_hash)  # 🛠️ Nyní již proměnná existuje
